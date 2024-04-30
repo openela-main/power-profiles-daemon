@@ -1,11 +1,11 @@
 Name:           power-profiles-daemon
-Version:        0.11.1
+Version:        0.13
 Release:        1%{?dist}
 Summary:        Makes power profiles handling available over D-Bus
 
 License:        GPLv3+
 URL:            https://gitlab.freedesktop.org/hadess/power-profiles-daemon
-Source0:        https://gitlab.freedesktop.org/hadess/power-profiles-daemon/uploads/f81e7fa231b3cb45dba87c85375aeaa2/power-profiles-daemon-0.11.1.tar.xz
+Source0:        https://gitlab.freedesktop.org/hadess/power-profiles-daemon/uploads/1f2ea40547b2af8d255875d7085211e5/power-profiles-daemon-0.13.tar.xz
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -66,7 +66,7 @@ systemctl --no-reload preset power-profiles-daemon.service &>/dev/null || :
 %{_bindir}/powerprofilesctl
 %{_libexecdir}/%{name}
 %{_unitdir}/%{name}.service
-%{_sysconfdir}/dbus-1/system.d/net.hadess.PowerProfiles.conf
+%{_datadir}/dbus-1/system.d/net.hadess.PowerProfiles.conf
 %{_datadir}/dbus-1/system-services/net.hadess.PowerProfiles.service
 %{_datadir}/polkit-1/actions/net.hadess.PowerProfiles.policy
 %{_localstatedir}/lib/power-profiles-daemon
@@ -77,6 +77,11 @@ systemctl --no-reload preset power-profiles-daemon.service &>/dev/null || :
 %{_datadir}/gtk-doc/html/%{name}/
 
 %changelog
+* Mon Sep 11 2023 Kate Hsuan <hpa@redhat.com> - 0.13-1
+- Update date to 0.13
+- Support for AMD P-State
+- Resolves: rhbz#2226568
+
 * Mon May 02 2022 Bastien Nocera <bnocera@redhat.com> - 0.11.1-1
 + power-profiles-daemon-0.11.1-1
 - Update to 0.11.1
