@@ -1,15 +1,17 @@
 Name:           power-profiles-daemon
-Version:        0.13
+Version:        0.21
 Release:        1%{?dist}
 Summary:        Makes power profiles handling available over D-Bus
 
 License:        GPLv3+
-URL:            https://gitlab.freedesktop.org/hadess/power-profiles-daemon
-Source0:        https://gitlab.freedesktop.org/hadess/power-profiles-daemon/uploads/1f2ea40547b2af8d255875d7085211e5/power-profiles-daemon-0.13.tar.xz
+URL:            https://gitlab.freedesktop.org/upower/power-profiles-daemon
+Source0:        https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/archive/0.21/power-profiles-daemon-0.21.tar.gz
 
+BuildRequires:  argparse-manpage
 BuildRequires:  meson
 BuildRequires:  gcc
 BuildRequires:  gtk-doc
+BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  pkgconfig(udev)
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -35,7 +37,10 @@ This package contains the documentation for %{name}.
 %autosetup
 
 %build
-%meson -Dgtk_doc=true
+%meson \
+    -Dgtk_doc=true \
+    -Dpylint=disabled \
+    -Dbashcomp=disabled
 %meson_build
 
 %install
@@ -67,9 +72,12 @@ systemctl --no-reload preset power-profiles-daemon.service &>/dev/null || :
 %{_libexecdir}/%{name}
 %{_unitdir}/%{name}.service
 %{_datadir}/dbus-1/system.d/net.hadess.PowerProfiles.conf
+%{_datadir}/dbus-1/system.d/org.freedesktop.UPower.PowerProfiles.conf
 %{_datadir}/dbus-1/system-services/net.hadess.PowerProfiles.service
-%{_datadir}/polkit-1/actions/net.hadess.PowerProfiles.policy
+%{_datadir}/dbus-1/system-services/org.freedesktop.UPower.PowerProfiles.service
+%{_datadir}/polkit-1/actions/power-profiles-daemon.policy
 %{_localstatedir}/lib/power-profiles-daemon
+%{_mandir}/man1/powerprofilesctl.1.gz
 
 %files docs
 %dir %{_datadir}/gtk-doc/
@@ -77,6 +85,12 @@ systemctl --no-reload preset power-profiles-daemon.service &>/dev/null || :
 %{_datadir}/gtk-doc/html/%{name}/
 
 %changelog
+* Mon Apr 15 2024 Kate Hsuan <hpa@redhat.com> - 0.21-1
+- Update to 0.21
+- Support multi-drivers mode and amdgpu
+- Support dynamically adjusts amd-pstate EPP values between battery and AC modes.
+- Resolves: RHEL-23395
+
 * Mon Sep 11 2023 Kate Hsuan <hpa@redhat.com> - 0.13-1
 - Update date to 0.13
 - Support for AMD P-State
